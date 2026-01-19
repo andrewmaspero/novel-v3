@@ -1,5 +1,12 @@
 .ProseMirror {
-  @apply p-12 px-8 sm:px-12;
+  padding: 3rem 2rem;
+}
+
+@media (min-width: 640px) {
+  .ProseMirror {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
 }
 
 .ProseMirror .is-editor-empty:first-child::before {
@@ -115,14 +122,8 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
   text-decoration-thickness: 2px;
 }
 
-/* Overwrite tippy-box original max-width */
-
-.tippy-box {
-  max-width: 400px !important;
-}
-
 .ProseMirror:not(.dragging) .ProseMirror-selectednode {
-  outline: none !important;
+  outline: none;
   background-color: var(--novel-highlight-blue);
   transition: background-color 0.2s;
   box-shadow: none;

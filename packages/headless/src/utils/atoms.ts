@@ -1,5 +1,6 @@
 import { atom } from "jotai";
+import type { WritableAtom } from "jotai";
 import type { Range } from "@tiptap/core";
 
 export const queryAtom = atom("");
-export const rangeAtom = atom<Range | null>(null);
+export const rangeAtom = atom<Range | null>(null) as WritableAtom<Range | null, [Range | null], void>;

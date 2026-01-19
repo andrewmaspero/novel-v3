@@ -1,3 +1,4 @@
+import { renderToMarkdown } from "@tiptap/static-renderer/pm/markdown";
 import { Fragment, type Node } from "@tiptap/pm/model";
 import type { EditorInstance } from "../components";
 
@@ -25,14 +26,18 @@ export function getUrlFromString(str: string) {
 export const getPrevText = (editor: EditorInstance, position: number) => {
   const nodes: Node[] = [];
   editor.state.doc.forEach((node, pos) => {
-    if (pos >= position) return false;
+    if (pos >= position) {
+      return;
+    }
     nodes.push(node);
-    return true;
   });
   const fragment = Fragment.fromArray(nodes);
   const doc = editor.state.doc.copy(fragment);
 
-  return editor.storage.markdown.serializer.serialize(doc) as string;
+  return renderToMarkdown({
+    content: doc,
+    extensions: editor.extensionManager.extensions,
+  });
 };
 
 // Get all content from the editor in markdown format
@@ -40,5 +45,19 @@ export const getAllContent = (editor: EditorInstance) => {
   const fragment = editor.state.doc.content;
   const doc = editor.state.doc.copy(fragment);
 
-  return editor.storage.markdown.serializer.serialize(doc) as string;
+  return renderToMarkdown({
+    content: doc,
+    extensions: editor.extensionManager.extensions,
+  });
+};
+
+// Get the selected text in markdown format
+export const getSelectionText = (editor: EditorInstance) => {
+  const slice = editor.state.selection.content();
+  const doc = editor.state.doc.copy(slice.content);
+
+  return renderToMarkdown({
+    content: doc,
+    extensions: editor.extensionManager.extensions,
+  });
 };

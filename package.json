@@ -13,21 +13,21 @@
     "lint:fix": "turbo lint --continue -- --apply",
     "clean": "turbo clean",
     "release": "turbo run release",
-    "prepare": "husky install",
+    "prepare": "husky",
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
-    "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.11",
-    "turbo": "^2.3.3"
+    "@changesets/changelog-github": "^0.5.2",
+    "@changesets/cli": "^2.29.8",
+    "turbo": "^2.7.5"
   },
   "packageManager": "pnpm@9.5.0",
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@commitlint/cli": "^19.6.1",
-    "@commitlint/config-conventional": "^19.6.0",
+    "@biomejs/biome": "^2.3.11",
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
     "husky": "^9.1.7",
-    "postcss": "^8.5.1"
+    "postcss": "^8.5.6"
   },
   "commitlint": {
     "extends": [
@@ -67,6 +67,11 @@
         "always",
         100
       ]
+    }
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@daybrush/utils@1.13.0": "patches/@daybrush__utils@1.13.0.patch"
     }
   }
 }

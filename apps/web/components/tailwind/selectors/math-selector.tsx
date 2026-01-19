@@ -1,7 +1,7 @@
 import { Button } from "@/components/tailwind/ui/button";
 import { cn } from "@/lib/utils";
 import { SigmaIcon } from "lucide-react";
-import { useEditor } from "novel";
+import { useEditor } from "novel/client";
 
 export const MathSelector = () => {
   const { editor } = useEditor();
@@ -13,7 +13,7 @@ export const MathSelector = () => {
       variant="ghost"
       size="sm"
       className="rounded-none w-12"
-      onClick={(evt) => {
+      onClick={(_evt) => {
         if (editor.isActive("math")) {
           editor.chain().focus().unsetLatex().run();
         } else {

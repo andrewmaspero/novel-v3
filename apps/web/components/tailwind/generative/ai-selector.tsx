@@ -2,10 +2,9 @@
 
 import { Command, CommandInput } from "@/components/tailwind/ui/command";
 
-import { useCompletion } from "ai/react";
+import { useCompletion } from "@ai-sdk/react";
 import { ArrowUp } from "lucide-react";
-import { useEditor } from "novel";
-import { addAIHighlight } from "novel";
+import { addAIHighlight, getSelectionText, useEditor } from "novel/client";
 import { useState } from "react";
 import Markdown from "react-markdown";
 import { toast } from "sonner";
@@ -29,11 +28,12 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
   const { completion, complete, isLoading } = useCompletion({
     // id: "novel",
     api: "/api/generate",
-    onResponse: (response) => {
+    fetch: async (input, init) => {
+      const response = await fetch(input, init);
       if (response.status === 429) {
         toast.error("You have reached your request limit for the day.");
-        return;
       }
+      return response;
     },
     onError: (e) => {
       toast.error(e.message);
@@ -82,8 +82,7 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
                     body: { option: "zap", command: inputValue },
                   }).then(() => setInputValue(""));
 
-                const slice = editor.state.selection.content();
-                const text = editor.storage.markdown.serializer.serialize(slice.content);
+                const text = getSelectionText(editor);
 
                 complete(text, {
                   body: { option: "zap", command: inputValue },

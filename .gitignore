@@ -14,11 +14,17 @@ apps/*/node_modules
 
 # production
 /build
+build/
+**/build/
+apps/*/build/
+packages/*/build/
 
 # misc
 .DS_Store
 *.pem
-
+.upstream
+.husky
+.history
 # debug
 .pnpm-debug.log*
 
@@ -37,15 +43,21 @@ yarn.lock
 *.tsbuildinfo
 next-env.d.ts
 
-
 # intellij
 .idea
 
+# build outputs
+dist/
 dist/**
+**/dist/
 /dist
 packages/*/dist
+apps/*/dist
 
+# turbo
 .turbo
+
+# test results
 /test-results/
 /playwright-report/
 /playwright/.cache/

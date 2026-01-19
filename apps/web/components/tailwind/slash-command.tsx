@@ -13,7 +13,7 @@ import {
   Twitter,
   Youtube,
 } from "lucide-react";
-import { Command, createSuggestionItems, renderItems } from "novel";
+import { Command, createSuggestionItems, renderItems } from "novel/client";
 import { uploadFn } from "./image-upload";
 
 export const suggestionItems = createSuggestionItems([
@@ -134,7 +134,7 @@ export const suggestionItems = createSuggestionItems([
       const videoLink = prompt("Please enter Youtube Video Link");
       //From https://regexr.com/3dj5t
       const ytregex = new RegExp(
-        /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+        /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(\S+)?$/,
       );
 
       if (ytregex.test(videoLink)) {

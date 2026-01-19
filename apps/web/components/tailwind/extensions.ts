@@ -21,7 +21,7 @@ import {
   UpdatedImage,
   UploadImagesPlugin,
   Youtube,
-} from "novel";
+} from "novel/client";
 
 import { cx } from "class-variance-authority";
 import { common, createLowlight } from "lowlight";
@@ -109,6 +109,8 @@ const starterKit = StarterKit.configure({
       spellcheck: "false",
     },
   },
+  link: false,
+  underline: false,
   horizontalRule: false,
   dropcursor: {
     color: "#DBEAFE",
@@ -149,14 +151,10 @@ const mathematics = Mathematics.configure({
 const characterCount = CharacterCount.configure();
 
 const markdownExtension = MarkdownExtension.configure({
-  html: true,
-  tightLists: true,
-  tightListClass: "tight",
-  bulletListMarker: "-",
-  linkify: false,
-  breaks: false,
-  transformPastedText: false,
-  transformCopiedText: false,
+  markedOptions: {
+    gfm: true,
+    breaks: false,
+  },
 });
 
 export const defaultExtensions = [

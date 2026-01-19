@@ -1,5 +1,5 @@
 import { ArrowDownWideNarrow, CheckCheck, RefreshCcwDot, StepForward, WrapText } from "lucide-react";
-import { getPrevText, useEditor } from "novel";
+import { getPrevText, getSelectionText, useEditor } from "novel/client";
 import { CommandGroup, CommandItem, CommandSeparator } from "../ui/command";
 
 const options = [
@@ -38,8 +38,7 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
         {options.map((option) => (
           <CommandItem
             onSelect={(value) => {
-              const slice = editor.state.selection.content();
-              const text = editor.storage.markdown.serializer.serialize(slice.content);
+              const text = getSelectionText(editor);
               onSelect(text, value);
             }}
             className="flex gap-2 px-4"

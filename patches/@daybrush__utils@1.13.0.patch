@@ -1,0 +1,13 @@
+diff --git a/dist/utils.esm.js b/dist/utils.esm.js
+index 499bb17695533c22e409db4532cc097d6d129f86..529f3531938481d6a83f091319670a0cb955b570 100644
+--- a/dist/utils.esm.js
++++ b/dist/utils.esm.js
+@@ -155,7 +155,7 @@ import {getCrossBrowserProperty} from "@daybrush/utils";
+ console.log(getCrossBrowserProperty("transform")); // "transform", "-ms-transform", "-webkit-transform"
+ console.log(getCrossBrowserProperty("filter")); // "filter", "-webkit-filter"
+ */
+-var getCrossBrowserProperty = /*#__PURE__*/function (property) {
++var getCrossBrowserProperty = function (property) {
+   if (!doc) {
+     return "";
+   }

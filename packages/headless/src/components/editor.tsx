@@ -33,9 +33,9 @@ export type EditorContentProps = Omit<EditorProviderProps, "content"> & {
 };
 
 export const EditorContent = forwardRef<HTMLDivElement, EditorContentProps>(
-  ({ className, children, initialContent, ...rest }, ref) => (
+  ({ className, children, initialContent, immediatelyRender = false, ...rest }, ref) => (
     <div ref={ref} className={className}>
-      <EditorProvider {...rest} content={initialContent}>
+      <EditorProvider {...rest} immediatelyRender={immediatelyRender} content={initialContent}>
         {children}
       </EditorProvider>
     </div>

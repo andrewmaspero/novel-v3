@@ -4,7 +4,8 @@
 </a>
 
 <p align="center">
-  An open-source Notion-style WYSIWYG editor with AI-powered autocompletions. 
+  A production-ready, Notion-style WYSIWYG editor built on TipTap v3 with AI-assisted writing,
+  SSR-safe rendering, and a clean client/server split.
 </p>
 
 <p align="center">
@@ -16,89 +17,265 @@
 </p>
 
 <p align="center">
-  <a href="#introduction"><strong>Introduction</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#setting-up-locally"><strong>Setting Up Locally</strong></a> ·
-  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+  <a href="#overview"><strong>Overview</strong></a> ·
+  <a href="#monorepo-layout"><strong>Monorepo Layout</strong></a> ·
+  <a href="#quick-start"><strong>Quick Start</strong></a> ·
+  <a href="#api-examples"><strong>API Examples</strong></a> ·
+  <a href="#dependency-status"><strong>Dependency Status</strong></a> ·
   <a href="#contributing"><strong>Contributing</strong></a> ·
   <a href="#license"><strong>License</strong></a>
 </p>
-<br/>
 
-## Docs (WIP)
+## Docs
 
 https://novel.sh/docs/introduction
 
-## Introduction
+## Overview
 
-[Novel](https://novel.sh/) is a Notion-style WYSIWYG editor with AI-powered autocompletions.
+Novel is a modern, extensible rich-text editor built on TipTap v3. This repository ships a headless
+package (`novel`) plus two working apps (Next.js and React Router v7 SSR) that demonstrate SSR-safe
+usage, AI-assisted completions, and a full menu/command system.
 
-https://github.com/steven-tey/novel/assets/28986134/2099877f-4f2b-4b1c-8782-5d803d63be5c
+Key features:
 
-<br />
+- TipTap v3 core and extensions, plus custom extensions for commands, uploads, Twitter, YouTube,
+  math, and more.
+- Client/server split: client-only editor UI lives in `novel/client`, while SSR rendering utilities
+  live in `novel/server`.
+- Static rendering with `@tiptap/static-renderer` (HTML + Markdown) and SSR-safe editor creation.
+- Built-in command UI and menu helpers (Bubble menu, command list, slash command helpers).
+- Multiple reference apps: Next.js app router and React Router v7 SSR.
 
-## Deploy Your Own
-
-You can deploy your own version of Novel to Vercel with one click:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://stey.me/novel-deploy)
-
-## Setting Up Locally
-
-To set up Novel locally, you'll need to clone the repository and set up the following environment variables:
-
-- `OPENAI_API_KEY` – your OpenAI API key (you can get one [here](https://platform.openai.com/account/api-keys))
-- `BLOB_READ_WRITE_TOKEN` – your Vercel Blob read/write token (currently [still in beta](https://vercel.com/docs/storage/vercel-blob/quickstart#quickstart), but feel free to [sign up on this form](https://vercel.fyi/blob-beta) for access)
-
-If you've deployed this to Vercel, you can also use [`vc env pull`](https://vercel.com/docs/cli/env#exporting-development-environment-variables) to pull the environment variables from your Vercel project.
-
-To run the app locally, you can run the following commands:
+## Monorepo Layout
 
 ```
-pnpm i
+apps/
+  web/        # Next.js app (App Router)
+  rr7-ssr/    # React Router v7 SSR (Express adapter)
+packages/
+  headless/   # The Novel editor package (exports novel, novel/client, novel/server)
+  tsconfig/   # Shared TS config
+```
+
+## Quick Start
+
+Install dependencies and run the workspace dev server:
+
+```bash
+pnpm install
 pnpm dev
 ```
 
-## Cross-framework support
+### Environment variables (apps/web)
 
-While Novel is built for React, we also have a few community-maintained packages for non-React frameworks:
+- `OPENAI_API_KEY` - OpenAI API key (used by the AI completion route)
+- `BLOB_READ_WRITE_TOKEN` - Vercel Blob read/write token (used by the image upload route)
 
-- Svelte: https://novel.sh/svelte
-- Vue: https://novel.sh/vue
+If you deployed to Vercel, you can pull envs with:
 
-## VSCode Extension
+```bash
+vc env pull
+```
 
-Thanks to @bennykok, Novel also has a VSCode Extension: https://novel.sh/vscode
+### Useful workspace scripts
 
-https://github.com/steven-tey/novel/assets/28986134/58ebf7e3-cdb3-43df-878b-119e304f7373
+```bash
+pnpm -w typecheck
+pnpm -w build
+pnpm -w lint
+```
+
+## Packages and Entry Points
+
+The `novel` package exposes explicit SSR-safe entry points:
+
+| Entry Point         | Use Case |
+|---------------------|----------|
+| `novel`             | Client-only bundle (re-exports `novel/client`) |
+| `novel/client`      | Full client API: components, extensions, plugins, utils |
+| `novel/client/core` | Client UI components only (smaller bundle) |
+| `novel/server`      | Static rendering + SSR-safe editor creation |
+
+## API Examples
+
+### 1) Basic editor (client)
+
+```tsx
+"use client";
+
+import {
+  EditorRoot,
+  EditorContent,
+  StarterKit,
+  type JSONContent,
+} from "novel/client";
+
+const initialContent: JSONContent = {
+  type: "doc",
+  content: [{ type: "paragraph", content: [{ type: "text", text: "Hello Novel" }] }],
+};
+
+export function Editor() {
+  return (
+    <EditorRoot>
+      <EditorContent extensions={[StarterKit]} content={initialContent} />
+    </EditorRoot>
+  );
+}
+```
+
+### 2) Command UI (slash command + menu)
+
+```tsx
+"use client";
+
+import {
+  EditorRoot,
+  EditorContent,
+  EditorCommand,
+  EditorCommandList,
+  EditorCommandItem,
+  StarterKit,
+  Command,
+  createSuggestionItems,
+  handleCommandNavigation,
+} from "novel/client";
+
+const items = createSuggestionItems([
+  { title: "Heading 1", command: ({ editor }) => editor.chain().focus().toggleHeading({ level: 1 }).run() },
+  { title: "Bullet List", command: ({ editor }) => editor.chain().focus().toggleBulletList().run() },
+]);
+
+export function EditorWithCommands() {
+  return (
+    <EditorRoot>
+      <EditorContent
+        extensions={[
+          StarterKit,
+          Command.configure({
+            suggestion: {
+              items: () => items,
+              render: () => ({
+                onKeyDown: handleCommandNavigation,
+              }),
+            },
+          }),
+        ]}
+      />
+      <EditorCommand className="command-menu">
+        <EditorCommandList>
+          {items.map((item) => (
+            <EditorCommandItem key={item.title} onCommand={item.command}>
+              {item.title}
+            </EditorCommandItem>
+          ))}
+        </EditorCommandList>
+      </EditorCommand>
+    </EditorRoot>
+  );
+}
+```
+
+### 3) Image uploads (client plugin)
+
+```tsx
+"use client";
+
+import {
+  EditorRoot,
+  EditorContent,
+  StarterKit,
+  UploadImagesPlugin,
+  createImageUpload,
+} from "novel/client";
+
+const uploadFn = async (file: File) => {
+  // Replace with your uploader; return a public URL.
+  const url = await uploadToBlob(file);
+  return url;
+};
+
+export function EditorWithUploads() {
+  return (
+    <EditorRoot>
+      <EditorContent
+        extensions={[StarterKit]}
+        editorProps={{
+          attributes: { class: "prose" },
+        }}
+        plugins={[
+          UploadImagesPlugin({
+            uploadFn,
+            onUpload: createImageUpload(uploadFn),
+          }),
+        ]}
+      />
+    </EditorRoot>
+  );
+}
+```
+
+### 4) SSR rendering (server)
+
+```ts
+import {
+  renderToHTMLString,
+  renderToMarkdown,
+  serverExtensions,
+  type JSONContent,
+} from "novel/server";
+
+const content: JSONContent = {
+  type: "doc",
+  content: [{ type: "paragraph", content: [{ type: "text", text: "SSR-safe" }] }],
+};
+
+const html = renderToHTMLString({ content, extensions: serverExtensions });
+const markdown = renderToMarkdown({ content, extensions: serverExtensions });
+```
+
+### 5) React Router v7 SSR (client-only editor)
+
+```tsx
+import { Suspense, lazy, useEffect, useState } from "react";
+
+const ClientEditor = lazy(() => import("./components/client-editor"));
+
+export default function IndexRoute() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  return (
+    <Suspense fallback={<div>Loading editor...</div>}>
+      {mounted ? <ClientEditor /> : null}
+    </Suspense>
+  );
+}
+```
+
+## Dependency Status
+
+All workspace dependencies are up to date as of January 19, 2026. The repo is maintained with
+`pnpm -r up -L`, and `pnpm -r outdated` reports no pending updates on this date. To re-verify:
+
+```bash
+pnpm -r outdated
+```
 
 ## Tech Stack
 
-Novel is built on the following stack:
-
-- [Next.js](https://nextjs.org/) – framework
-- [Tiptap](https://tiptap.dev/) – text editor
-- [OpenAI](https://openai.com/) - AI completions
-- [Vercel AI SDK](https://sdk.vercel.ai/docs) – AI library
-- [Vercel](https://vercel.com) – deployments
-- [TailwindCSS](https://tailwindcss.com/) – styles
-- [Cal Sans](https://github.com/calcom/font) – font
+- TipTap v3
+- Next.js App Router
+- React Router v7 SSR (Express adapter)
+- Vercel AI SDK + OpenAI
+- Tailwind CSS
+- Floating UI
 
 ## Contributing
 
-Here's how you can contribute:
-
-- [Open an issue](https://github.com/steven-tey/novel/issues) if you believe you've encountered a bug.
-- Make a [pull request](https://github.com/steven-tey/novel/pull) to add new features/make quality-of-life improvements/fix bugs.
-
-<a href="https://github.com/steven-tey/novel/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=steven-tey/novel" />
-</a>
-
-## Repo Activity
-
-![Novel.sh repo activity – generated by Axiom](https://repobeats.axiom.co/api/embed/2ebdaa143b0ad6e7c2ee23151da7b37f67da0b36.svg)
+- Open an issue if you find a bug or want to propose a feature.
+- PRs are welcome. Please run `pnpm -w typecheck`, `pnpm -w lint`, and `pnpm -w build` before submitting.
 
 ## License
 
-Licensed under the [Apache-2.0 license](https://github.com/steven-tey/novel/blob/main/LICENSE).
+Licensed under the Apache-2.0 license.

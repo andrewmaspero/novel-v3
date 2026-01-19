@@ -1,6 +1,6 @@
 import { Node, mergeAttributes, nodePasteRule } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer, type ReactNodeViewRendererOptions } from "@tiptap/react";
-import { Tweet } from "react-tweet";
+import { useEffect, useState, type ComponentType } from "react";
 export const TWITTER_REGEX_GLOBAL = /(https?:\/\/)?(www\.)?x\.com\/([a-zA-Z0-9_]{1,15})(\/status\/(\d+))?(\/\S*)?/g;
 export const TWITTER_REGEX = /^https?:\/\/(www\.)?x\.com\/([a-zA-Z0-9_]{1,15})(\/status\/(\d+))?(\/\S*)?$/;
 
@@ -11,8 +11,22 @@ export const isValidTwitterUrl = (url: string) => {
 const TweetComponent = ({ node }: { node: Partial<ReactNodeViewRendererOptions> }) => {
   const url = (node?.attrs as Record<string, string>)?.src;
   const tweetId = url?.split("/").pop();
+  const [Tweet, setTweet] = useState<null | ComponentType<{ id: string }>>(null);
 
-  if (!tweetId) {
+  useEffect(() => {
+    let active = true;
+    void import("react-tweet").then((mod) => {
+      if (active) {
+        setTweet(() => mod.Tweet);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if (!tweetId || !Tweet) {
     return null;
   }
 
@@ -33,8 +47,7 @@ export interface TwitterOptions {
    */
   addPasteHandler: boolean;
 
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  HTMLAttributes: Record<string, any>;
+  HTMLAttributes: Record<string, string>;
 
   /**
    * Controls if the twitter node should be inline or not.

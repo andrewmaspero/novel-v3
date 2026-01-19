@@ -13,24 +13,27 @@ export const UploadImagesPlugin = ({ imageClass }: { imageClass: string }) =>
       apply(tr, set) {
         set = set.map(tr.mapping, tr.doc);
         // See if the transaction adds or removes any placeholders
-        //@ts-expect-error - not yet sure what the type I need here
-        const action = tr.getMeta(this);
-        if (action?.add) {
+        const action = tr.getMeta(uploadKey) as
+          | { add: { id: object; pos: number; src: string | ArrayBuffer | null } }
+          | { remove: { id: object } }
+          | undefined;
+        if (action && "add" in action) {
           const { id, pos, src } = action.add;
 
           const placeholder = document.createElement("div");
           placeholder.setAttribute("class", "img-placeholder");
           const image = document.createElement("img");
           image.setAttribute("class", imageClass);
-          image.src = src;
+          if (typeof src === "string") {
+            image.src = src;
+          }
           placeholder.appendChild(image);
           const deco = Decoration.widget(pos + 1, placeholder, {
             id,
           });
           set = set.add(tr.doc, [deco]);
-        } else if (action?.remove) {
-          // biome-ignore lint/suspicious/noDoubleEquals: <explanation>
-          set = set.remove(set.find(undefined, undefined, (spec) => spec.id == action.remove.id));
+        } else if (action && "remove" in action) {
+          set = set.remove(set.find(undefined, undefined, (spec) => spec.id === action.remove.id));
         }
         return set;
       },
@@ -42,16 +45,14 @@ export const UploadImagesPlugin = ({ imageClass }: { imageClass: string }) =>
     },
   });
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
-function findPlaceholder(state: EditorState, id: {}) {
+function findPlaceholder(state: EditorState, id: object) {
   const decos = uploadKey.getState(state) as DecorationSet;
-  // biome-ignore lint/suspicious/noDoubleEquals: <explanation>
-  const found = decos.find(undefined, undefined, (spec) => spec.id == id);
+  const found = decos.find(undefined, undefined, (spec) => spec.id === id);
   return found.length ? found[0]?.from : null;
 }
 
 export interface ImageUploadOptions {
-  validateFn?: (file: File) => void;
+  validateFn?: (file: File) => boolean | undefined;
   onUpload: (file: File) => Promise<unknown>;
 }
 
@@ -59,8 +60,8 @@ export const createImageUpload =
   ({ validateFn, onUpload }: ImageUploadOptions): UploadFn =>
   (file, view, pos) => {
     // check if the file is an image
-    const validated = validateFn?.(file);
-    if (!validated) return;
+    const isValid = validateFn ? validateFn(file) !== false : true;
+    if (!isValid) return;
     // A fresh object to act as the ID for this upload
     const id = {};
 

@@ -1,0 +1,14 @@
+{
+  "extends": "tsconfig/react.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "novel": ["../../packages/headless/src/index.ts"],
+      "novel/client": ["../../packages/headless/src/client/index.ts"],
+      "novel/client/core": ["../../packages/headless/src/client/core.ts"],
+      "novel/server": ["../../packages/headless/src/server/index.ts"]
+    }
+  },
+  "include": ["app", "react-router.config.ts"]
+}

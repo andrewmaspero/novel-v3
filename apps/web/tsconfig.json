@@ -1,16 +1,37 @@
 {
   "extends": "tsconfig/next.json",
-
   "compilerOptions": {
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ],
+      "novel": [
+        "../../packages/headless/src/index.ts"
+      ],
+      "novel/client": [
+        "../../packages/headless/src/client/index.ts"
+      ],
+      "novel/client/core": [
+        "../../packages/headless/src/client/core.ts"
+      ],
+      "novel/server": [
+        "../../packages/headless/src/server/index.ts"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

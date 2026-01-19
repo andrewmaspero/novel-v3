@@ -1,5 +1,6 @@
 import { createStore } from "jotai";
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export const novelStore: any = createStore();
+export type NovelStore = ReturnType<typeof createStore>;
+
+export const novelStore: NovelStore = createStore();
 export * from "jotai";

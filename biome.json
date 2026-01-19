@@ -1,20 +1,28 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.6.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
   "files": {
     "ignoreUnknown": true,
-    "ignore": [
-      "node_modules/*",
-      "*.config.*",
-      "*.json",
-      "tsconfig.json",
-      ".turbo",
-      "**/dist",
-      "**/out",
-      ".next"
+    "includes": [
+      "**/*",
+      "!node_modules/**",
+      "!**/node_modules/**",
+      "!*.config.*",
+      "!**/*.config.*",
+      "!**/*.json",
+      "!**/tsconfig.json",
+      "!**/.turbo/**",
+      "!**/dist/**",
+      "!**/out/**",
+      "!**/.next/**"
     ]
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "linter": {
     "enabled": true,
@@ -29,6 +37,9 @@
         "noUnusedImports": "warn",
         "noUnusedVariables": "warn"
       },
+      "suspicious": {
+        "noUnknownAtRules": "off"
+      },
       "style": {
         "noParameterAssign": "off"
       }
@@ -40,5 +51,10 @@
     "indentStyle": "space",
     "lineEnding": "lf",
     "lineWidth": 120
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
   }
 }
