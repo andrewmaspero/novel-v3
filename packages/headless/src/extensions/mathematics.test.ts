@@ -3,6 +3,17 @@ import { Editor } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import { Mathematics } from "./mathematics";
 
+type MathematicsExtension = {
+  config: {
+    addNodeView: () => (args: {
+      node: { attrs: { latex: string }; nodeSize: number };
+      HTMLAttributes: Record<string, string>;
+      getPos: () => number | string;
+      editor: { isEditable: boolean; commands: { setTextSelection: (pos: number) => void } };
+    }) => { dom: HTMLElement };
+  };
+};
+
 describe("Mathematics", () => {
   it("inserts and removes latex", () => {
     const editor = new Editor({
@@ -55,7 +66,7 @@ describe("Mathematics", () => {
   it("creates a node view for math", () => {
     const extension = Mathematics.configure({
       HTMLAttributes: { "data-option": "value" },
-    }) as any;
+    }) as unknown as MathematicsExtension;
     const nodeViewFactory = extension.config.addNodeView.call(extension);
     const setTextSelection = vi.fn();
 
@@ -76,7 +87,7 @@ describe("Mathematics", () => {
   });
 
   it("skips click selection when editor is not editable", () => {
-    const extension = Mathematics.configure({}) as any;
+    const extension = Mathematics.configure({}) as unknown as MathematicsExtension;
     const nodeViewFactory = extension.config.addNodeView.call(extension);
     const setTextSelection = vi.fn();
 
@@ -92,7 +103,7 @@ describe("Mathematics", () => {
   });
 
   it("skips click selection when getPos returns non-number", () => {
-    const extension = Mathematics.configure({}) as any;
+    const extension = Mathematics.configure({}) as unknown as MathematicsExtension;
     const nodeViewFactory = extension.config.addNodeView.call(extension);
     const setTextSelection = vi.fn();
 

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import * as React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { EditorCommandItem } from "./editor-command-item";
 import { EditorRoot } from "./editor";
@@ -27,9 +28,11 @@ vi.mock("cmdk", () => ({
     },
   ),
   CommandItem: ({ children, onSelect }: { children: React.ReactNode; onSelect: () => void }) => (
-    <div data-testid="command-item" onClick={() => onSelect()}>
-      {children}
-    </div>
+    <React.Fragment>
+      <button type="button" data-testid="command-item" onClick={() => onSelect()}>
+        {children}
+      </button>
+    </React.Fragment>
   ),
   CommandEmpty: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));

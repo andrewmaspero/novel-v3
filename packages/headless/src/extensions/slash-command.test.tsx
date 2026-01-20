@@ -42,7 +42,13 @@ describe("slash-command", () => {
 
   it("configures command extension options and plugins", async () => {
     const options = Command.config.addOptions.call(Command) as {
-      suggestion: { command: (args: any) => void };
+      suggestion: {
+        command: (args: {
+          editor: unknown;
+          range: { from: number; to: number };
+          props: { command: (args: unknown) => void };
+        }) => void;
+      };
     };
     const commandSpy = vi.fn();
     options.suggestion.command({

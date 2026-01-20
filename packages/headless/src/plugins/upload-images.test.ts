@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { EditorState, Plugin } from "@tiptap/pm/state";
+import type { EditorState, Plugin } from "@tiptap/pm/state";
 import { Schema } from "@tiptap/pm/model";
 import { UploadImagesPlugin, createImageUpload, handleImageDrop, handleImagePaste } from "./upload-images";
 
@@ -57,7 +57,7 @@ describe("UploadImagesPlugin", () => {
       },
     } as unknown as { state: EditorState; dispatch: (tr: EditorState["tr"]) => void };
 
-    let resolveUpload: (value: string) => void;
+    let resolveUpload: ((value: string) => void) | null = null;
     const uploadPromise = new Promise<string>((resolve) => {
       resolveUpload = resolve;
     });
@@ -70,7 +70,10 @@ describe("UploadImagesPlugin", () => {
     uploadFn(file, view as never, 1);
 
     await flushPromises();
-    resolveUpload!("https://example.com/image.png");
+    if (!resolveUpload) {
+      throw new Error("Upload resolver missing");
+    }
+    resolveUpload("https://example.com/image.png");
     await flushPromises();
 
     expect(view.state.doc.toString()).toContain("image");
@@ -89,7 +92,7 @@ describe("UploadImagesPlugin", () => {
       },
     } as unknown as { state: EditorState; dispatch: (tr: EditorState["tr"]) => void };
 
-    let resolveUpload: (value: object) => void;
+    let resolveUpload: ((value: object) => void) | null = null;
     const uploadPromise = new Promise<object>((resolve) => {
       resolveUpload = resolve;
     });
@@ -102,7 +105,10 @@ describe("UploadImagesPlugin", () => {
     uploadFn(file, view as never, 1);
 
     await flushPromises();
-    resolveUpload!({ ok: true });
+    if (!resolveUpload) {
+      throw new Error("Upload resolver missing");
+    }
+    resolveUpload({ ok: true });
     await flushPromises();
 
     let imageSrc: string | null = null;

@@ -37,8 +37,12 @@ describe("Twitter", () => {
       content: "",
     });
 
-    const extension = editor.extensionManager.extensions.find((ext) => ext.name === "twitter") as any;
-    const rules = extension.config.addPasteRules.call(extension);
+    const extension = editor.extensionManager.extensions.find((ext) => ext.name === "twitter");
+    if (!extension) {
+      throw new Error("Twitter extension missing");
+    }
+    const twitterExtension = extension as { config: { addPasteRules: () => unknown[] } };
+    const rules = twitterExtension.config.addPasteRules.call(twitterExtension);
     expect(rules).toHaveLength(0);
 
     editor.destroy();
@@ -51,8 +55,12 @@ describe("Twitter", () => {
       content: "",
     });
 
-    const extension = editor.extensionManager.extensions.find((ext) => ext.name === "twitter") as any;
-    const rules = extension.config.addPasteRules.call(extension);
+    const extension = editor.extensionManager.extensions.find((ext) => ext.name === "twitter");
+    if (!extension) {
+      throw new Error("Twitter extension missing");
+    }
+    const twitterExtension = extension as { config: { addPasteRules: () => unknown[] } };
+    const rules = twitterExtension.config.addPasteRules.call(twitterExtension);
     expect(rules.length).toBeGreaterThan(0);
 
     editor.destroy();

@@ -24,19 +24,30 @@ describe("AIHighlight", () => {
     removeAIHighlight(editor);
     expect(editor.getAttributes("ai-highlight").color).toBeUndefined();
 
-    const ai = editor.extensionManager.extensions.find((ext) => ext.name === "ai-highlight") as any;
+    const ai = editor.extensionManager.extensions.find((ext) => ext.name === "ai-highlight");
+    if (!ai) {
+      throw new Error("AI highlight extension missing");
+    }
+    const aiExtension = ai as unknown as {
+      config: {
+        addKeyboardShortcuts: () => Record<string, () => void>;
+        addInputRules: () => unknown[];
+        addPasteRules: () => unknown[];
+        addAttributes: () => { color: { renderHTML: (attrs: Record<string, unknown>) => Record<string, unknown> } };
+      };
+    };
     editor.commands.setTextSelection({ from: 1, to: 6 });
-    const shortcuts = ai.config.addKeyboardShortcuts.call({ ...ai, editor });
+    const shortcuts = aiExtension.config.addKeyboardShortcuts.call({ ...aiExtension, editor });
     shortcuts["Mod-Shift-h"]();
     expect(editor.isActive("ai-highlight")).toBe(true);
 
-    const inputRules = ai.config.addInputRules.call(ai);
-    const pasteRules = ai.config.addPasteRules.call(ai);
+    const inputRules = aiExtension.config.addInputRules.call(aiExtension);
+    const pasteRules = aiExtension.config.addPasteRules.call(aiExtension);
     expect(inputRules).toHaveLength(1);
     expect(pasteRules).toHaveLength(1);
 
     editor.commands.unsetAIHighlight();
-    const attrs = ai.config.addAttributes.call(ai);
+    const attrs = aiExtension.config.addAttributes.call(aiExtension);
     expect(attrs.color.renderHTML({})).toEqual({});
 
     addAIHighlight(editor);

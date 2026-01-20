@@ -90,7 +90,7 @@ test("image upload + resizer handles", async ({ page }) => {
       clipboardData: dt,
       bubbles: true,
     });
-    const editor = document.querySelector('[contenteditable=\"true\"]');
+    const editor = document.querySelector('[contenteditable="true"]');
     editor?.dispatchEvent(event);
   }, base64);
 

@@ -29,8 +29,16 @@ describe("CustomKeymap", () => {
     expect(to).toBe(endNodePos);
 
     editor.commands.setTextSelection({ from: 2, to: 4 });
-    const custom = editor.extensionManager.extensions.find((ext) => ext.name === "CustomKeymap") as any;
-    const shortcuts = custom.config.addKeyboardShortcuts.call(custom);
+    const custom = editor.extensionManager.extensions.find((ext) => ext.name === "CustomKeymap");
+    if (!custom) {
+      throw new Error("CustomKeymap extension missing");
+    }
+    const customExtension = custom as {
+      config: {
+        addKeyboardShortcuts: () => Record<string, (args: { editor: Editor }) => boolean>;
+      };
+    };
+    const shortcuts = customExtension.config.addKeyboardShortcuts.call(customExtension);
     const handled = shortcuts["Mod-a"]({ editor });
     expect(handled).toBe(true);
 

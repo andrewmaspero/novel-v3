@@ -3,14 +3,19 @@ import { render } from "@testing-library/react";
 import { ImageResizer } from "./image-resizer";
 
 const useCurrentEditorMock = vi.fn();
-let moveableProps: any;
+type MoveableProps = {
+  onResize?: (args: { target: HTMLElement; width: number; height: number; delta: [number, number] }) => void;
+  onScale?: (args: { target: HTMLElement; transform: string }) => void;
+  onResizeEnd?: () => void;
+};
+let moveableProps: MoveableProps | null = null;
 
 vi.mock("@tiptap/react", () => ({
   useCurrentEditor: () => useCurrentEditorMock(),
 }));
 
 vi.mock("react-moveable", () => ({
-  default: (props: Record<string, unknown>) => {
+  default: (props: MoveableProps) => {
     moveableProps = props;
     return <div data-testid="moveable" />;
   },
@@ -42,6 +47,9 @@ describe("ImageResizer", () => {
     useCurrentEditorMock.mockReturnValue({ editor });
     render(<ImageResizer />);
 
+    if (!moveableProps) {
+      throw new Error("Moveable props missing");
+    }
     moveableProps.onResize?.({
       target: image,
       width: 150,
