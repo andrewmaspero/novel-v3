@@ -13,12 +13,9 @@ describe("utils", () => {
   it("parses urls from strings", () => {
     expect(getUrlFromString("example.com")).toBe("https://example.com/");
     expect(getUrlFromString("https://example.com")).toBe("https://example.com");
-    expect(getUrlFromString("not a url"))
-      .toBeUndefined();
-    expect(getUrlFromString("example.com:abc"))
-      .toBe("example.com:abc");
-    expect(getUrlFromString("exa[mple].com"))
-      .toBeNull();
+    expect(getUrlFromString("not a url")).toBeUndefined();
+    expect(getUrlFromString("example.com:abc")).toBe("example.com:abc");
+    expect(getUrlFromString("exa[mple].com")).toBeNull();
   });
 
   it("returns markdown slices from editor content", () => {

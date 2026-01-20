@@ -6,8 +6,7 @@ import { Twitter, isValidTwitterUrl, TWITTER_REGEX } from "./twitter";
 describe("Twitter", () => {
   it("validates twitter urls", () => {
     expect(isValidTwitterUrl("https://x.com/user/status/123")).toBeTruthy();
-    expect(isValidTwitterUrl("https://example.com"))
-      .toBeNull();
+    expect(isValidTwitterUrl("https://example.com")).toBeNull();
     expect("https://x.com/user/status/123".match(TWITTER_REGEX)).toBeTruthy();
   });
 

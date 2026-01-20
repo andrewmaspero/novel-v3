@@ -3,9 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { EditorContent, EditorRoot } from "./editor";
 
 vi.mock("@tiptap/react", () => ({
-  EditorProvider: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="editor-provider">{children}</div>
-  ),
+  EditorProvider: ({ children }: { children: React.ReactNode }) => <div data-testid="editor-provider">{children}</div>,
 }));
 
 describe("Editor components", () => {

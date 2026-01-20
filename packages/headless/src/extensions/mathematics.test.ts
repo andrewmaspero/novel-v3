@@ -45,7 +45,7 @@ describe("Mathematics", () => {
     editor.commands.setLatex({ latex: "y" });
     const html = editor.getHTML();
 
-    expect(html).toContain("data-type=\"math\"");
+    expect(html).toContain('data-type="math"');
     expect(html).toContain("y");
     editor.destroy();
   });

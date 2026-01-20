@@ -31,19 +31,13 @@ export const renderToMarkdown = ({ extensions, ...options }: RenderMarkdownOptio
     extensions: extensions ?? serverExtensions,
   });
 
-export const createServerEditor = ({
-  extensions,
-  content,
-  ...options
-}: CreateServerEditorOptions) =>
-  new Editor(
-    {
-      element: null,
-      extensions: extensions ?? serverExtensions,
-      content: content ?? null,
-      ...options,
-    } as EditorOptions,
-  );
+export const createServerEditor = ({ extensions, content, ...options }: CreateServerEditorOptions) =>
+  new Editor({
+    element: null,
+    extensions: extensions ?? serverExtensions,
+    content: content ?? null,
+    ...options,
+  } as EditorOptions);
 
 export { serverExtensions };
 

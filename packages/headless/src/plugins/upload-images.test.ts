@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { EditorState, Plugin } from "@tiptap/pm/state";
+import { EditorState, type Plugin } from "@tiptap/pm/state";
 import { Schema } from "@tiptap/pm/model";
 import { UploadImagesPlugin, createImageUpload, handleImageDrop, handleImagePaste } from "./upload-images";
 
@@ -16,9 +16,7 @@ const schema = new Schema({
 const createState = (plugin: Plugin) =>
   EditorState.create({
     schema,
-    doc: schema.nodes.doc.create({}, [
-      schema.nodes.paragraph.create({}, schema.text("Hello")),
-    ]),
+    doc: schema.nodes.doc.create({}, [schema.nodes.paragraph.create({}, schema.text("Hello"))]),
     plugins: [plugin],
   });
 

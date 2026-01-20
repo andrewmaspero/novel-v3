@@ -7,13 +7,7 @@ import type { ComponentPropsWithoutRef } from "react";
 import type { Editor, Range } from "@tiptap/core";
 
 interface EditorCommandItemProps {
-  readonly onCommand: ({
-    editor,
-    range,
-  }: {
-    editor: Editor;
-    range: Range;
-  }) => void;
+  readonly onCommand: ({ editor, range }: { editor: Editor; range: Range }) => void;
 }
 
 export const EditorCommandItem = forwardRef<

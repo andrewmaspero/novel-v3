@@ -33,7 +33,7 @@ describe("EditorBubbleItem", () => {
     const { container } = render(
       <EditorBubbleItem asChild onSelect={onSelect}>
         <button type="button">Child</button>
-      </EditorBubbleItem>
+      </EditorBubbleItem>,
     );
 
     const buttons = container.querySelectorAll("button");

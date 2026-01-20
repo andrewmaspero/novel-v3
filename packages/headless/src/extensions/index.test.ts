@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
 import { Editor } from "@tiptap/core";
-import { HorizontalRule, clientExtensions } from "./index";
+import { describe, expect, it, vi } from "vitest";
+import { clientExtensions, HorizontalRule } from "./index";
 import { HorizontalRule as ServerHorizontalRule, serverExtensions } from "./server";
 
 type PlaceholderExtension = {
@@ -74,8 +74,8 @@ describe("extensions bundles", () => {
       range: { from: 2, to: 4 },
       match,
       commands: {} as never,
-      chain: () => ({} as never),
-      can: () => ({} as never),
+      chain: () => ({}) as never,
+      can: () => ({}) as never,
     });
     expect(create).toHaveBeenCalled();
     expect(tr.insert).toHaveBeenCalled();
@@ -128,8 +128,8 @@ describe("extensions bundles", () => {
       range: { from: 2, to: 4 },
       match,
       commands: {} as never,
-      chain: () => ({} as never),
-      can: () => ({} as never),
+      chain: () => ({}) as never,
+      can: () => ({}) as never,
     });
     expect(create).toHaveBeenCalled();
     expect(tr.insert).toHaveBeenCalled();

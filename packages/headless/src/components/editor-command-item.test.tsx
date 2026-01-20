@@ -1,10 +1,10 @@
-import { describe, expect, it, vi } from "vitest";
-import * as React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { EditorCommandItem } from "./editor-command-item";
-import { EditorRoot } from "./editor";
-import { novelStore } from "../utils/store";
+import * as React from "react";
+import { describe, expect, it, vi } from "vitest";
 import { rangeAtom } from "../utils/atoms";
+import { novelStore } from "../utils/store";
+import { EditorRoot } from "./editor";
+import { EditorCommandItem } from "./editor-command-item";
 
 const useCurrentEditorMock = vi.fn();
 
@@ -13,20 +13,17 @@ vi.mock("@tiptap/react", () => ({
 }));
 
 vi.mock("cmdk", () => ({
-  Command: Object.assign(
-    ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-    {
-      Input: ({ onValueChange, value, ...rest }: Record<string, unknown>) => (
-        <input
-          value={value as string | number | readonly string[] | undefined}
-          onChange={(event) => (onValueChange as ((next: string) => void) | undefined)?.(event.currentTarget.value)}
-          readOnly={!onValueChange}
-          {...rest}
-        />
-      ),
-      List: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-    },
-  ),
+  Command: Object.assign(({ children }: { children: React.ReactNode }) => <div>{children}</div>, {
+    Input: ({ onValueChange, value, ...rest }: Record<string, unknown>) => (
+      <input
+        value={value as string | number | readonly string[] | undefined}
+        onChange={(event) => (onValueChange as ((next: string) => void) | undefined)?.(event.currentTarget.value)}
+        readOnly={!onValueChange}
+        {...rest}
+      />
+    ),
+    List: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  }),
   CommandItem: ({ children, onSelect }: { children: React.ReactNode; onSelect: () => void }) => (
     <React.Fragment>
       <button type="button" data-testid="command-item" onClick={() => onSelect()}>

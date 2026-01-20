@@ -11,11 +11,7 @@ export const ImageResizer: FC = () => {
     const imageInfo = document.querySelector(".ProseMirror-selectednode") as HTMLImageElement;
     if (imageInfo) {
       const selection = editor.state.selection;
-      const setImage = editor.commands.setImage as (options: {
-        src: string;
-        width: number;
-        height: number;
-      }) => boolean;
+      const setImage = editor.commands.setImage as (options: { src: string; width: number; height: number }) => boolean;
 
       setImage({
         src: imageInfo.src,

@@ -78,8 +78,7 @@ test("image upload + resizer handles", async ({ page }) => {
   await editor.click();
   await page.keyboard.type("\nImage paste test");
 
-  const base64 =
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO9lJdQAAAAASUVORK5CYII=";
+  const base64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO9lJdQAAAAASUVORK5CYII=";
 
   await page.evaluate((b64) => {
     const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
