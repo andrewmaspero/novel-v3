@@ -1,14 +1,17 @@
 {
   "extends": "tsconfig/react.json",
   "compilerOptions": {
-    "types": ["node"],
+    "strict": false,
+    "types": ["node", "vite/client"],
     "baseUrl": ".",
+    "rootDirs": [".", ".react-router/types"],
     "paths": {
-      "novel": ["../../packages/headless/src/index.ts"],
-      "novel/client": ["../../packages/headless/src/client/index.ts"],
-      "novel/client/core": ["../../packages/headless/src/client/core.ts"],
-      "novel/server": ["../../packages/headless/src/server/index.ts"]
+      "~/*": ["./app/*"],
+      "@vectorfy/novel": ["../../packages/headless/src/index.ts"],
+      "@vectorfy/novel/client": ["../../packages/headless/src/client/index.ts"],
+      "@vectorfy/novel/client/core": ["../../packages/headless/src/client/core.ts"],
+      "@vectorfy/novel/server": ["../../packages/headless/src/server/index.ts"]
     }
   },
-  "include": ["app", "react-router.config.ts"]
+  "include": ["app", "react-router.config.ts", ".react-router/types/**/*"]
 }

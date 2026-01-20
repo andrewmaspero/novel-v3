@@ -14,7 +14,7 @@ import {
   handleCommandNavigation,
   handleImageDrop,
   handleImagePaste,
-} from "novel/client";
+} from "@vectorfy/novel/client";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { defaultExtensions } from "./extensions";
@@ -71,7 +71,7 @@ const TailwindAdvancedEditor = () => {
   if (!initialContent) return null;
 
   return (
-    <div className="relative w-full max-w-screen-lg">
+    <div className="relative w-full max-w-[1024px]">
       <div className="flex absolute right-5 top-5 z-10 mb-5 gap-2">
         <div className="rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground">{saveStatus}</div>
         <div className={charsCount !== null ? "rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground" : "hidden"}>
@@ -82,7 +82,7 @@ const TailwindAdvancedEditor = () => {
         <EditorContent
           initialContent={initialContent}
           extensions={extensions}
-          className="relative min-h-[500px] w-full max-w-screen-lg border-muted bg-background sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:shadow-lg"
+          className="relative min-h-[500px] w-full max-w-[1024px] border-muted bg-background sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:shadow-lg"
           shouldRerenderOnTransaction={true}
           editorProps={{
             handleDOMEvents: {

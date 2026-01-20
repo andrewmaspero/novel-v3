@@ -61,3 +61,6 @@ apps/*/dist
 /test-results/
 /playwright-report/
 /playwright/.cache/
+apps/rr7-ssr/.react-router/
+coverage/
+packages/*/coverage/

@@ -1,7 +1,7 @@
 {
   "extends": "tsconfig/react.json",
   "include": ["./src/**/*"],
-  "exclude": ["dist", "build", "node_modules"],
+  "exclude": ["dist", "build", "node_modules", "**/*.test.ts", "**/*.test.tsx", "src/test"],
   "compilerOptions": {
     "declarationMap": false,
     "outDir": "dist"

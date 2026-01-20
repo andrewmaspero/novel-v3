@@ -11,16 +11,16 @@
       "@/*": [
         "./*"
       ],
-      "novel": [
+      "@vectorfy/novel": [
         "../../packages/headless/src/index.ts"
       ],
-      "novel/client": [
+      "@vectorfy/novel/client": [
         "../../packages/headless/src/client/index.ts"
       ],
-      "novel/client/core": [
+      "@vectorfy/novel/client/core": [
         "../../packages/headless/src/client/core.ts"
       ],
-      "novel/server": [
+      "@vectorfy/novel/server": [
         "../../packages/headless/src/server/index.ts"
       ]
     }

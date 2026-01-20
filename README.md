@@ -33,15 +33,15 @@ https://novel.sh/docs/introduction
 ## Overview
 
 Novel is a modern, extensible rich-text editor built on TipTap v3. This repository ships a headless
-package (`novel`) plus two working apps (Next.js and React Router v7 SSR) that demonstrate SSR-safe
+package (`@vectorfy/novel`) plus two working apps (Next.js and React Router v7 SSR) that demonstrate SSR-safe
 usage, AI-assisted completions, and a full menu/command system.
 
 Key features:
 
 - TipTap v3 core and extensions, plus custom extensions for commands, uploads, Twitter, YouTube,
   math, and more.
-- Client/server split: client-only editor UI lives in `novel/client`, while SSR rendering utilities
-  live in `novel/server`.
+- Client/server split: client-only editor UI lives in `@vectorfy/novel/client`, while SSR rendering utilities
+  live in `@vectorfy/novel/server`.
 - Static rendering with `@tiptap/static-renderer` (HTML + Markdown) and SSR-safe editor creation.
 - Built-in command UI and menu helpers (Bubble menu, command list, slash command helpers).
 - Multiple reference apps: Next.js app router and React Router v7 SSR.
@@ -53,7 +53,7 @@ apps/
   web/        # Next.js app (App Router)
   rr7-ssr/    # React Router v7 SSR (Express adapter)
 packages/
-  headless/   # The Novel editor package (exports novel, novel/client, novel/server)
+  headless/   # The Novel editor package (exports @vectorfy/novel, @vectorfy/novel/client, @vectorfy/novel/server)
   tsconfig/   # Shared TS config
 ```
 
@@ -83,18 +83,19 @@ vc env pull
 pnpm -w typecheck
 pnpm -w build
 pnpm -w lint
+pnpm -w test
 ```
 
 ## Packages and Entry Points
 
-The `novel` package exposes explicit SSR-safe entry points:
+The `@vectorfy/novel` package exposes explicit SSR-safe entry points:
 
 | Entry Point         | Use Case |
 |---------------------|----------|
-| `novel`             | Client-only bundle (re-exports `novel/client`) |
-| `novel/client`      | Full client API: components, extensions, plugins, utils |
-| `novel/client/core` | Client UI components only (smaller bundle) |
-| `novel/server`      | Static rendering + SSR-safe editor creation |
+| `@vectorfy/novel`             | Client-only bundle (re-exports `@vectorfy/novel/client`) |
+| `@vectorfy/novel/client`      | Full client API: components, extensions, plugins, utils |
+| `@vectorfy/novel/client/core` | Client UI components only (smaller bundle) |
+| `@vectorfy/novel/server`      | Static rendering + SSR-safe editor creation |
 
 ## API Examples
 
@@ -108,7 +109,7 @@ import {
   EditorContent,
   StarterKit,
   type JSONContent,
-} from "novel/client";
+} from "@vectorfy/novel/client";
 
 const initialContent: JSONContent = {
   type: "doc",
@@ -139,7 +140,7 @@ import {
   Command,
   createSuggestionItems,
   handleCommandNavigation,
-} from "novel/client";
+} from "@vectorfy/novel/client";
 
 const items = createSuggestionItems([
   { title: "Heading 1", command: ({ editor }) => editor.chain().focus().toggleHeading({ level: 1 }).run() },
@@ -187,7 +188,7 @@ import {
   StarterKit,
   UploadImagesPlugin,
   createImageUpload,
-} from "novel/client";
+} from "@vectorfy/novel/client";
 
 const uploadFn = async (file: File) => {
   // Replace with your uploader; return a public URL.
@@ -223,7 +224,7 @@ import {
   renderToMarkdown,
   serverExtensions,
   type JSONContent,
-} from "novel/server";
+} from "@vectorfy/novel/server";
 
 const content: JSONContent = {
   type: "doc",

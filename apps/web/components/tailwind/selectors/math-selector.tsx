@@ -1,7 +1,7 @@
 import { Button } from "@/components/tailwind/ui/button";
 import { cn } from "@/lib/utils";
 import { SigmaIcon } from "lucide-react";
-import { useEditor } from "novel/client";
+import { useEditor } from "@vectorfy/novel/client";
 
 export const MathSelector = () => {
   const { editor } = useEditor();

@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SSR snapshots > renders HTML consistently 1`] = `"<h2>Snapshot</h2><p>Hello world</p><ul><li><p>Item</p></li></ul>"`;
+
+exports[`SSR snapshots > renders Markdown consistently 1`] = `
+"## Snapshot
+
+Hello world
+
+- Item
+"
+`;
